@@ -1,7 +1,7 @@
 package com.lamudi.phonefield;
 
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -37,7 +37,7 @@ public class PhoneInputLayout extends PhoneField {
   @Override
   protected void prepareView() {
     super.prepareView();
-    mTextInputLayout = (TextInputLayout) findViewWithTag(getResources().getString(R.string.com_lamudi_phonefield_til_phone));
+    mTextInputLayout = findViewWithTag(getResources().getString(R.string.com_lamudi_phonefield_til_phone));
   }
 
   @Override

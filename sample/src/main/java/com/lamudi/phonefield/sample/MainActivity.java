@@ -1,7 +1,7 @@
 package com.lamudi.phonefield.sample;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     final PhoneInputLayout phoneInputLayout =
-        (PhoneInputLayout) findViewById(R.id.phone_input_layout);
-    final PhoneEditText phoneEditText = (PhoneEditText) findViewById(R.id.edit_text);
+            findViewById(R.id.phone_input_layout);
+    final PhoneEditText phoneEditText = findViewById(R.id.edit_text);
 
     CustomPhoneInputLayout customPhoneInputLayout = new CustomPhoneInputLayout(this, "EG");
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     viewGroup.addView(customPhoneInputLayout, 2);
 
 
-    final Button button = (Button) findViewById(R.id.submit_button);
+    final Button button = findViewById(R.id.submit_button);
 
     assert phoneInputLayout != null;
     assert phoneEditText != null;
