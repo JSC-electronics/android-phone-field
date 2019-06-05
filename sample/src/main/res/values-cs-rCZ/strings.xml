@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Vzorová aplikace</string>
+    <string name="phone_hint">Telefonní číslo</string>
+    <string name="submit">Odeslat</string>
+    <string name="invalid_phone_number">Zadejte, prosím, platné telefonní číslo</string>
+    <string name="valid_phone_number">Platné telefonní číslo!</string>
+</resources>
