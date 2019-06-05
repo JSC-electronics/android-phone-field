@@ -3,9 +3,10 @@ package cz.jsc.electronics.phonefield;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Countries {
+final class Countries {
 
-    public static final List<Country> COUNTRIES = new ArrayList<>();
+    static final List<Country> COUNTRIES = new ArrayList<>();
+
     static {
         COUNTRIES.add(new Country("af", "Afghanistan (‫افغانستان‬‎)", 93));
         COUNTRIES.add(new Country("al", "Albania (Shqipëri)", 355));

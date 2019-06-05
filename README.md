@@ -1,9 +1,9 @@
 android-phone-field
 ===================
 
-android-phone-field is A small UI library that allows you to create phone fields with corresponding country flags, and validate the phone number using [libphonenumber](https://github.com/googlei18n/libphonenumber) from google.
+This is a small UI library which allows you to create phone fields with corresponding country flags and validate the phone number using [libphonenumber](https://github.com/googlei18n/libphonenumber) from Google.
 
-![alt text](https://raw.githubusercontent.com/lamudi-gmbh/android-phone-field/master/raw/phone-field.gif "Sample App")
+![alt text]( https://raw.githubusercontent.com/JSC-electronics/android-phone-field/master/raw/phone-field.gif "Sample App")
 
 The library has two different fields:
 
@@ -23,7 +23,7 @@ The library has two different fields:
 In your module's gradle file add the following dependency, please make sure that you have jcenter in your repositories list
 
 ```
-compile ('com.lamudi.phonefield:phone-field:0.1.3@aar') {
+compile ('cz.jsc.electronics.phonefield:phone-field:0.1.4@aar') {
     transitive = true
 }
 ```
@@ -31,7 +31,7 @@ compile ('com.lamudi.phonefield:phone-field:0.1.3@aar') {
  In your layout you can use the PhoneInputLayout 
  
 ```xml
-<com.lamudi.phonefield.PhoneInputLayout
+<cz.jsc.electronics.phonefield.PhoneInputLayout
      android:id="@+id/phone_input_layout"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"/>
@@ -40,7 +40,7 @@ compile ('com.lamudi.phonefield:phone-field:0.1.3@aar') {
  or the PhoneEditText
  
 ```xml
- <com.lamudi.phonefield.PhoneEditText
+ <cz.jsc.electronics.phonefield.PhoneEditText
      android:id="@+id/edit_text"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"/>
@@ -98,7 +98,7 @@ button.setOnClickListener(new View.OnClickListener() {
 
 ## Customization
 
-In case the default style doesn't match your app styles, you can extend the PhoneInputLayout, or PhoneEditText and provide your own xml, but keep in mind that you have to provide a valid xml file with at least an EditText (tag = com_lamudi_phonefield_edittext) and Spinner (tag = com_lamudi_phonefield_flag_spinner), otherwise the library will throw an IllegalStateException.
+In case the default style doesn't match your app styles, you can extend the PhoneInputLayout, or PhoneEditText and provide your own xml, but keep in mind that you have to provide a valid xml file with at least an EditText (tag = phonefield_edittext) and Spinner (tag = phonefield_flag_spinner), otherwise the library will throw an IllegalStateException.
 
 You can also create your own custom view by extending the PhoneField directly. 
 
@@ -116,6 +116,8 @@ or
 
 ## Motivation
 
+*Note: This is fork of an original library by lamudi-gmbg, which was unmaintained. We made the fork to fix bugs we had while using the original library.*
+
 This is probably not the the first library with the same purpose, for instance before I started working on the library I came across [IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput) which provides almost most of the functionality this library provides, however I chose to develop a new library for the following reasons: 
  
  * This library provides two implementations of PhoneField using EditText and TextInputLayout
@@ -128,3 +130,4 @@ This is probably not the the first library with the same purpose, for instance b
  2. Flag images from [flags](https://www.gosquared.com/resources/flag-icons/)
  3. Original country data from mledoze's [World countries in JSON, CSV and XML](https://github.com/mledoze/countries) which is then used to generate a plain Java file
  4. Formatting/validation using [libphonenumber](https://github.com/googlei18n/libphonenumber)
+ 5. Original library by [lamudi-gmbh](https://github.com/lamudi-gmbh/android-phone-field)
