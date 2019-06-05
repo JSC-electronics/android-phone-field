@@ -17,12 +17,9 @@ public class Country {
 
     private final String mName;
 
-    private final int mDialCode;
-
-    public Country(String code, String name, int dialCode) {
+    public Country(String code, String name) {
         mCode = code;
         mName = name;
-        mDialCode = dialCode;
     }
 
     public String getCode() {
@@ -31,10 +28,6 @@ public class Country {
 
     public String getName() {
         return mName;
-    }
-
-    public int getDialCode() {
-        return mDialCode;
     }
 
     public String getDisplayName() {

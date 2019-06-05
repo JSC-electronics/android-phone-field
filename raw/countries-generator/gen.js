@@ -33,7 +33,7 @@ function generateCountriesClass() {
     a("public static final List<Country> COUNTRIES = new ArrayList<>();",4);
     a("static {",4);
     countries.forEach(function(country) {
-    	a("COUNTRIES.add(new Country(\""+country.iso2+"\", \""+country.name+"\", "+country.dialCode+"));", 8);
+    	a("COUNTRIES.add(new Country(\""+country.cca2.toLowerCase()+"\", \""+country.name.common+"\"));", 8);
 	});
 	a("}",4);
     a();
