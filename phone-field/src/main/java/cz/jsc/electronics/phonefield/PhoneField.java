@@ -17,11 +17,12 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 /**
- * PhoneField is a custom view for phone numbers with the corresponding country flag, and it uses
+ * PhoneField is a custom view for phone numbers with the corresponding country flag. It uses
  * libphonenumber to validate the phone number.
  * <p>
  * Created by Ismail on 5/6/16.
  */
+@SuppressWarnings("unused")
 public abstract class PhoneField extends LinearLayout {
 
     private Spinner mSpinner;

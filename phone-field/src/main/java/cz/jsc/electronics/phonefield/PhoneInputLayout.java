@@ -11,6 +11,7 @@ import com.google.android.material.textfield.TextInputLayout;
  * Implementation of PhoneField that uses {@link TextInputLayout}
  * Created by Ismail on 5/6/16.
  */
+@SuppressWarnings("unused")
 public class PhoneInputLayout extends PhoneField {
 
     private TextInputLayout mTextInputLayout;

@@ -10,6 +10,7 @@ import java.util.Locale;
  *
  * @author Ismail Almetwally
  */
+@SuppressWarnings("WeakerAccess")
 public class Country {
 
     private final String mCode;

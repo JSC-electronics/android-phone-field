@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import cz.jsc.electronics.phonefield.PhoneInputLayout;
 
 /**
- * Custom PhoneInputLayout that allows users
+ * Custom PhoneInputLayout
  * Created by Ismail on 8/30/16.
  */
 
