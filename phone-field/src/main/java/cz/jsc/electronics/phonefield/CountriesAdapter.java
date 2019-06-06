@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ import java.util.List;
 public class CountriesAdapter extends ArrayAdapter<Country> implements SpinnerAdapter {
 
     private final LayoutInflater mInflater;
+    private final PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
 
     CountriesAdapter(Context context, List<Country> countries) {
         super(context, R.layout.item_country, R.id.name, countries);
@@ -60,7 +63,7 @@ public class CountriesAdapter extends ArrayAdapter<Country> implements SpinnerAd
         if (country != null) {
             viewHolder.mFlag.setImageResource(country.getResId(getContext()));
             viewHolder.mName.setText(country.getDisplayName());
-            viewHolder.mDialCode.setText(String.valueOf(country.getDialCode()));
+            viewHolder.mDialCode.setText(String.format("+%s", String.valueOf(mPhoneUtil.getCountryCodeForRegion(country.getCode()))));
         }
         return convertView;
 

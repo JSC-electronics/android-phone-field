@@ -31,7 +31,7 @@ public abstract class PhoneField extends LinearLayout {
 
     private Country mCountry;
 
-    private PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
+    private final PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
 
     private int mDefaultCountryPosition = 0;
 
@@ -114,8 +114,9 @@ public abstract class PhoneField extends LinearLayout {
                     }
                     try {
                         Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
-                        if (mCountry == null || mCountry.getDialCode() != number.getCountryCode()) {
-                            selectCountry(number.getCountryCode());
+                        String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
+                        if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCode())) {
+                            selectCountry(regionCode);
                         }
                     } catch (NumberParseException ignored) {
                     }
@@ -206,10 +207,10 @@ public abstract class PhoneField extends LinearLayout {
         }
     }
 
-    private void selectCountry(int dialCode) {
+    private void selectCountry(String regionCode) {
         for (int i = 0; i < Countries.COUNTRIES.size(); i++) {
             Country country = Countries.COUNTRIES.get(i);
-            if (country.getDialCode() == dialCode) {
+            if (country.getCode().equalsIgnoreCase(regionCode)) {
                 mCountry = country;
                 mSpinner.setSelection(i);
             }
@@ -224,9 +225,11 @@ public abstract class PhoneField extends LinearLayout {
     public void setPhoneNumber(String rawNumber) {
         try {
             Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
-            if (mCountry == null || mCountry.getDialCode() != number.getCountryCode()) {
-                selectCountry(number.getCountryCode());
+            String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
+            if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCode())) {
+                selectCountry(regionCode);
             }
+
             mEditText.setText(mPhoneUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
         } catch (NumberParseException ignored) {
         }
@@ -284,5 +287,4 @@ public abstract class PhoneField extends LinearLayout {
     public void setTextColor(int resId) {
         mEditText.setTextColor(resId);
     }
-
 }
