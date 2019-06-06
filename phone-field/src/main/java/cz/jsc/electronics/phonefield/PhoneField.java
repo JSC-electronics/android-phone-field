@@ -92,7 +92,6 @@ public abstract class PhoneField extends LinearLayout {
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -197,22 +196,23 @@ public abstract class PhoneField extends LinearLayout {
      * @param countryCode the country code
      */
     public void setDefaultCountry(String countryCode) {
-        for (int i = 0; i < Countries.COUNTRIES.size(); i++) {
-            Country country = Countries.COUNTRIES.get(i);
-            if (country.getCode().equalsIgnoreCase(countryCode)) {
-                mCountry = country;
-                mDefaultCountryPosition = i;
-                mSpinner.setSelection(i);
-            }
-        }
+        this.selectCountry(countryCode, true);
     }
 
     private void selectCountry(String regionCode) {
+        this.selectCountry(regionCode, false);
+    }
+
+    private void selectCountry(String regionCode, boolean setAsDefault) {
         for (int i = 0; i < Countries.COUNTRIES.size(); i++) {
             Country country = Countries.COUNTRIES.get(i);
             if (country.getCode().equalsIgnoreCase(regionCode)) {
                 mCountry = country;
                 mSpinner.setSelection(i);
+
+                if (setAsDefault) {
+                    mDefaultCountryPosition = i;
+                }
             }
         }
     }

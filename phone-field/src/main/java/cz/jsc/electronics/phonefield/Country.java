@@ -3,6 +3,8 @@ package cz.jsc.electronics.phonefield;
 import android.content.Context;
 import android.content.res.Resources;
 
+import androidx.annotation.IdRes;
+
 import java.util.Locale;
 
 /**
@@ -34,9 +36,16 @@ public class Country {
         return new Locale("", mCode).getDisplayCountry();
     }
 
-    public int getResId(Context context) {
+    public @IdRes int getResId(Context context) {
         String name = String.format("country_flag_%s", mCode.toLowerCase());
         final Resources resources = context.getResources();
-        return resources.getIdentifier(name, "drawable", context.getPackageName());
+        @IdRes int resourceId = resources.getIdentifier(name, "drawable", context.getPackageName());
+        if (resourceId == 0) {
+            // Resource not found. Fallback to UNKNOWN flag.
+            name = "country_flag_unknown";
+            resourceId = resources.getIdentifier(name, "drawable", context.getPackageName());
+        }
+
+        return resourceId;
     }
 }
