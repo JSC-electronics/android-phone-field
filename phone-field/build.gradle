@@ -13,7 +13,7 @@ ext {
   siteUrl = 'https://github.com/JSC-electronics/android-phone-field'
   gitUrl = 'https://github.com/JSC-electronics/android-phone-field.git'
 
-  libraryVersion = '0.1.4-alpha01'
+  libraryVersion = '0.1.4'
 
   developerId = 'vzahradnik'
   developerName = 'Vladimír Záhradník'

@@ -1,6 +1,8 @@
 android-phone-field
 ===================
 
+*Note: This is a fork of an original library by lamudi-gmbg, which was unmaintained. We made the fork to fix bugs we had while using the original library.*
+
 This is a small UI library which allows you to create phone fields with corresponding country flags and validate the phone number using [libphonenumber](https://github.com/googlei18n/libphonenumber) from Google.
 
 ![alt text]( https://raw.githubusercontent.com/JSC-electronics/android-phone-field/master/raw/phone-field.gif "Sample App")
@@ -115,9 +117,6 @@ or
 ```
 
 ## Motivation
-
-*Note: This is fork of an original library by lamudi-gmbg, which was unmaintained. We made the fork to fix bugs we had while using the original library.*
-
 This is probably not the the first library with the same purpose, for instance before I started working on the library I came across [IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput) which provides almost most of the functionality this library provides, however I chose to develop a new library for the following reasons: 
  
  * This library provides two implementations of PhoneField using EditText and TextInputLayout
