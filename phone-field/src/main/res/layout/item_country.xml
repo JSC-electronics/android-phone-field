@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
     android:padding="@dimen/padding_large">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/flag"
         android:layout_width="@dimen/flag_size"
         android:layout_height="@dimen/flag_size"
-        android:contentDescription="@string/country_flag" />
+        android:contentDescription="@string/country_flag"
+        tools:src="@drawable/country_flag_sk"
+        />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/name"
@@ -18,14 +21,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
         android:layout_marginLeft="@dimen/margin_medium"
-        android:textColor="@color/pf_grey" />
+        android:layout_toEndOf="@id/flag"
+        android:layout_toRightOf="@id/flag"
+        android:layout_toStartOf="@id/dial_code"
+        android:layout_toLeftOf="@id/dial_code"
+        android:textColor="@color/pf_grey"
+        tools:text="Slovakia"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dial_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginLeft="@dimen/margin_medium"
-        android:textColor="@color/pf_grey_light" />
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:maxLines="1"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/pf_grey_light"
+        tools:text="+421"/>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</RelativeLayout>

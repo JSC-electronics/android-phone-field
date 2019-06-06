@@ -5,7 +5,7 @@
         android:layout_width="@dimen/spinner_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_large"
-        android:dropDownWidth="@dimen/spinner_height"
+        android:dropDownWidth="@dimen/spinner_dropdown_width"
         android:popupBackground="@color/pf_white"
         android:tag="@string/phonefield_flag_spinner" />
 

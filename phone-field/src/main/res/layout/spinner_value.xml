@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,5 +12,6 @@
         android:id="@+id/flag"
         android:layout_width="@dimen/flag_size"
         android:layout_height="@dimen/flag_size"
-        android:contentDescription="@string/country_flag" />
+        android:contentDescription="@string/country_flag"
+        tools:src="@drawable/country_flag_sk"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
