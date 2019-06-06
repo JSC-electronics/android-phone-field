@@ -10,19 +10,19 @@ This is a small UI library which allows you to create phone fields with correspo
 The library has two different fields:
 
  * PhoneEditText : includes EditText alongside the flags spinner
- * PhoneInputLayout : includes a TextInputLayout from the design support library alongside the flags spinner 
+ * PhoneInputLayout : includes a TextInputLayout from the [Material design support library](https://material.io/develop/) alongside the flags spinner 
  
 ## Features
  
  * Displays the correct country flag if the user enters a valid international phone number
- * Allows the user to choose the country manually and only enter a national phone number
- * Allows you to choose a default country, which the field will change to automatically if the user chose a different country then cleared the field.
+ * Allows an user to choose the country manually and only enter a national phone number
+ * Allows you to choose a default country, which will be set automatically after the user chose a different country and then cleared the field.
  * Validates the phone number 
- * Returns the valid phone number including the country code
+ * Returns valid phone number including country code
  
 ## Usage
 
-In your module's gradle file add the following dependency, please make sure that you have jcenter in your repositories list
+In your module's gradle file add the following dependency. Please make sure that you have jcenter in your repositories list.
 
 ```
 compile ('cz.jsc.electronics.phonefield:phone-field:0.1.4@aar') {
