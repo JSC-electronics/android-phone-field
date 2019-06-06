@@ -1,9 +1,26 @@
+/*
+ * Copyright 2016 lamudi-gmbh
+ * Copyright 2019 and modified by JSC electronics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package cz.jsc.electronics.phonefield;
 
 import android.content.Context;
 import android.content.res.Resources;
 
-import androidx.annotation.IdRes;
+import androidx.annotation.DrawableRes;
 
 import java.util.Locale;
 
@@ -11,6 +28,7 @@ import java.util.Locale;
  * Country object that holds the country iso2 code, name, and dial code.
  *
  * @author Ismail Almetwally
+ * Modified by vzahradnik on 6/6/2019.
  */
 @SuppressWarnings("WeakerAccess")
 public class Country {
@@ -24,7 +42,7 @@ public class Country {
         mName = name;
     }
 
-    public String getCode() {
+    public String getCountryCode() {
         return mCode;
     }
 
@@ -36,10 +54,11 @@ public class Country {
         return new Locale("", mCode).getDisplayCountry();
     }
 
-    public @IdRes int getResId(Context context) {
+    public @DrawableRes
+    int getResId(Context context) {
         String name = String.format("country_flag_%s", mCode.toLowerCase());
         final Resources resources = context.getResources();
-        @IdRes int resourceId = resources.getIdentifier(name, "drawable", context.getPackageName());
+        @DrawableRes int resourceId = resources.getIdentifier(name, "drawable", context.getPackageName());
         if (resourceId == 0) {
             // Resource not found. Fallback to UNKNOWN flag.
             name = "country_flag_unknown";

@@ -127,6 +127,7 @@ This is probably not the the first library with the same purpose, for instance b
 
  1. Inspired by [intl-tel-input for jQuery](https://github.com/jackocnr/intl-tel-input) and [IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput)
  2. Flag images from [GoSquared](https://www.gosquared.com/resources/flag-icons/)
- 3. Original country data from mledoze's [World countries in JSON, CSV and XML](https://github.com/mledoze/countries) which is then used to generate a plain Java file
- 4. Formatting/validation using [libphonenumber](https://github.com/googlei18n/libphonenumber)
- 5. Original library by [lamudi-gmbh](https://github.com/lamudi-gmbh/android-phone-field)
+ 3. Flag images for countries not contained in GoSquared package were taken from Wikimedia and resized. All were available under permissive CC license.
+ 4. Original country data from mledoze's [World countries in JSON, CSV and XML](https://github.com/mledoze/countries) which is then used to generate a plain Java file
+ 5. Formatting/validation using [libphonenumber](https://github.com/googlei18n/libphonenumber)
+ 6. Original library by [lamudi-gmbh](https://github.com/lamudi-gmbh/android-phone-field)

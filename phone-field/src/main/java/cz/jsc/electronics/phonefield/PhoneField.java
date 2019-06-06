@@ -1,3 +1,20 @@
+/*
+ * Copyright 2016 lamudi-gmbh
+ * Copyright 2019 and modified by JSC electronics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package cz.jsc.electronics.phonefield;
 
 import android.content.Context;
@@ -9,8 +26,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
+
+import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -21,9 +39,10 @@ import com.google.i18n.phonenumbers.Phonenumber;
  * libphonenumber to validate the phone number.
  * <p>
  * Created by Ismail on 5/6/16.
+ * Modified by vzahradnik on 6/6/2019.
  */
 @SuppressWarnings("unused")
-public abstract class PhoneField extends LinearLayout {
+public abstract class PhoneField extends LinearLayoutCompat {
 
     private Spinner mSpinner;
 
@@ -114,7 +133,7 @@ public abstract class PhoneField extends LinearLayout {
                     try {
                         Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
                         String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
-                        if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCode())) {
+                        if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCountryCode())) {
                             selectCountry(regionCode);
                         }
                     } catch (NumberParseException ignored) {
@@ -172,7 +191,7 @@ public abstract class PhoneField extends LinearLayout {
     }
 
     private Phonenumber.PhoneNumber parsePhoneNumber(String number) throws NumberParseException {
-        String defaultRegion = mCountry != null ? mCountry.getCode().toUpperCase() : "";
+        String defaultRegion = mCountry != null ? mCountry.getCountryCode().toUpperCase() : "";
         return mPhoneUtil.parseAndKeepRawInput(number, defaultRegion);
     }
 
@@ -206,7 +225,7 @@ public abstract class PhoneField extends LinearLayout {
     private void selectCountry(String regionCode, boolean setAsDefault) {
         for (int i = 0; i < Countries.COUNTRIES.size(); i++) {
             Country country = Countries.COUNTRIES.get(i);
-            if (country.getCode().equalsIgnoreCase(regionCode)) {
+            if (country.getCountryCode().equalsIgnoreCase(regionCode)) {
                 mCountry = country;
                 mSpinner.setSelection(i);
 
@@ -226,7 +245,7 @@ public abstract class PhoneField extends LinearLayout {
         try {
             Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
             String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
-            if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCode())) {
+            if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCountryCode())) {
                 selectCountry(regionCode);
             }
 
