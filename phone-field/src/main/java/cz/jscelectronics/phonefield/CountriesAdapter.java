@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package cz.jsc.electronics.phonefield;
+package cz.jscelectronics.phonefield;
 
 import android.content.Context;
 import android.view.LayoutInflater;

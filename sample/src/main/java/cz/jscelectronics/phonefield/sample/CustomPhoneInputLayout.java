@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package cz.jsc.electronics.phonefield.sample;
+package cz.jscelectronics.phonefield.sample;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import cz.jsc.electronics.phonefield.PhoneInputLayout;
+import cz.jscelectronics.phonefield.PhoneInputLayout;
 
 /**
  * Custom PhoneInputLayout

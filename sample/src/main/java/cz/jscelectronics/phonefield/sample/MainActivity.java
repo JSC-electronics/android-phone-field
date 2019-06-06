@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package cz.jsc.electronics.phonefield.sample;
+package cz.jscelectronics.phonefield.sample;
 
 import android.os.Bundle;
 import android.view.View;
@@ -25,8 +25,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import cz.jsc.electronics.phonefield.PhoneEditText;
-import cz.jsc.electronics.phonefield.PhoneInputLayout;
+import cz.jscelectronics.phonefield.PhoneEditText;
+import cz.jscelectronics.phonefield.PhoneInputLayout;
 
 public class MainActivity extends AppCompatActivity {
 

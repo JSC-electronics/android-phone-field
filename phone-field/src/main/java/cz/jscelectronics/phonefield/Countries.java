@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cz.jsc.electronics.phonefield;
+package cz.jscelectronics.phonefield;
 
 import java.util.ArrayList;
 import java.util.List;

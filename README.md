@@ -25,7 +25,7 @@ The library has two different fields:
 In your module's gradle file add the following dependency. Please make sure that you have jcenter in your repositories list.
 
 ```
-compile ('cz.jsc.electronics.phonefield:phone-field:0.1.4@aar') {
+compile ('cz.jscelectronics.phonefield:phone-field:0.1.4@aar') {
     transitive = true
 }
 ```
@@ -33,7 +33,7 @@ compile ('cz.jsc.electronics.phonefield:phone-field:0.1.4@aar') {
  In your layout you can use the PhoneInputLayout 
  
 ```xml
-<cz.jsc.electronics.phonefield.PhoneInputLayout
+<cz.jscelectronics.phonefield.PhoneInputLayout
      android:id="@+id/phone_input_layout"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"/>
@@ -42,7 +42,7 @@ compile ('cz.jsc.electronics.phonefield:phone-field:0.1.4@aar') {
  or the PhoneEditText
  
 ```xml
- <cz.jsc.electronics.phonefield.PhoneEditText
+ <cz.jscelectronics.phonefield.PhoneEditText
      android:id="@+id/edit_text"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"/>

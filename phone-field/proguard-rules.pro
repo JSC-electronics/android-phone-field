@@ -16,6 +16,6 @@
 #   public *;
 #}
 
--keep class cz.jsc.electronics.phonefield.** { *; }
+-keep class cz.jscelectronics.phonefield.** { *; }
 -keep class com.google.i18n.** { *; }
 -keep interface com.google.i18n.** { *; }

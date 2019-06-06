@@ -40,7 +40,7 @@ function generateCountriesClass() {
       }
     };
 
-    a("package cz.jsc.electronics.phonefield;");
+    a("package cz.jscelectronics.phonefield;");
     a();
     a("import java.util.ArrayList;");
     a("import java.util.List;");

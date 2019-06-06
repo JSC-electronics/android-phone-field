@@ -28,7 +28,7 @@
     android:orientation="vertical"
     >
 
-    <cz.jsc.electronics.phonefield.PhoneInputLayout
+    <cz.jscelectronics.phonefield.PhoneInputLayout
         android:id="@+id/phone_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:layout_marginBottom="16dp"
         />
 
-    <cz.jsc.electronics.phonefield.PhoneEditText
+    <cz.jscelectronics.phonefield.PhoneEditText
         android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
