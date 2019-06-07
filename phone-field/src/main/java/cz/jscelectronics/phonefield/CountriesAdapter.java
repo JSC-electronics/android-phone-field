@@ -80,7 +80,7 @@ public class CountriesAdapter extends ArrayAdapter<Country> implements SpinnerAd
         Country country = getItem(position);
         if (country != null) {
             viewHolder.mFlag.setImageResource(country.getResId(getContext()));
-            viewHolder.mName.setText(country.getDisplayName());
+            viewHolder.mName.setText(country.getCountryName());
             viewHolder.mDialCode.setText(String.format("+%s",
                     String.valueOf(mPhoneUtil.getCountryCodeForRegion(country.getCountryCode()))));
         }

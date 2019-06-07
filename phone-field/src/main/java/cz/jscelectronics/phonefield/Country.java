@@ -22,6 +22,8 @@ import android.content.res.Resources;
 
 import androidx.annotation.DrawableRes;
 
+import java.text.Collator;
+import java.util.Comparator;
 import java.util.Locale;
 
 /**
@@ -31,20 +33,23 @@ import java.util.Locale;
  * Modified by vzahradnik on 6/6/2019.
  */
 @SuppressWarnings("WeakerAccess")
-public class Country {
+public class Country implements Comparable<Country> {
 
     private final String mCode;
 
-    public Country(String code) {
+    private final String mName;
+
+    public Country(String code, String name) {
         mCode = code;
+        mName = name;
     }
 
     public String getCountryCode() {
         return mCode;
     }
 
-    public String getDisplayName() {
-        return new Locale("", mCode).getDisplayCountry();
+    public String getCountryName() {
+        return mName;
     }
 
     public @DrawableRes
@@ -60,4 +65,18 @@ public class Country {
 
         return resourceId;
     }
+
+    @Override
+    public int compareTo(Country o) {
+        Collator coll = Collator.getInstance(Locale.getDefault());
+        coll.setStrength(Collator.PRIMARY);
+        return coll.compare(this.getCountryName(), o.getCountryName());
+    }
+
+    public static Comparator<Country> CountryComparatorByName = new Comparator<Country>() {
+        @Override
+        public int compare(Country o1, Country o2) {
+            return o1.compareTo(o2);
+        }
+    };
 }

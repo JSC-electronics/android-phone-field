@@ -35,6 +35,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,8 +63,11 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     static {
         for (String countryId : Locale.getISOCountries()) {
-            COUNTRIES.add(new Country(countryId));
+            COUNTRIES.add(new Country(countryId,
+                    new Locale("", countryId).getDisplayCountry()));
         }
+
+        Collections.sort(COUNTRIES, Country.CountryComparatorByName);
     }
 
     /**
