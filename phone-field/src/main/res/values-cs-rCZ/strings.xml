@@ -15,6 +15,5 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string name="app_name">Telefonní políčko</string>
     <string name="country_flag">Vlajka země</string>
 </resources>
