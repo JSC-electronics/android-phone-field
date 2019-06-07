@@ -105,16 +105,7 @@ In case the default style doesn't match your app styles, you can extend the Phon
 You can also create your own custom view by extending the PhoneField directly. 
 
 ## Countries generation
-For better performance and to avoid using json data and then parse it to be used in the library, a simple nodejs is used to convert the countries.json file in raw/countries-generator/ into a plain java utility class that has static list of countries.
-
-The generation script works as follows:
-```
-node gen.js
-
-or
-
-./gen.js
-```
+We're calling Java API to get list of countries as a two-letter country code. This list generation is called each time a new instance of PhoneField is created.
 
 ## Motivation
 This is probably not the the first library with the same purpose, for instance before I started working on the library I came across [IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput) which provides almost most of the functionality this library provides, however I chose to develop a new library for the following reasons: 

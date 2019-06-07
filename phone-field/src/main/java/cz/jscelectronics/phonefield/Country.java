@@ -35,19 +35,12 @@ public class Country {
 
     private final String mCode;
 
-    private final String mName;
-
-    public Country(String code, String name) {
+    public Country(String code) {
         mCode = code;
-        mName = name;
     }
 
     public String getCountryCode() {
         return mCode;
-    }
-
-    public String getName() {
-        return mName;
     }
 
     public String getDisplayName() {

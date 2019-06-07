@@ -34,6 +34,10 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * PhoneField is a custom view for phone numbers with the corresponding country flag. It uses
  * libphonenumber to validate the phone number.
@@ -48,11 +52,19 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private EditText mEditText;
 
-    private Country mCountry;
+    private Country mSelectedCountry;
 
     private final PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
 
     private int mDefaultCountryPosition = 0;
+
+    static private final List<Country> COUNTRIES = new ArrayList<>(0);
+
+    static {
+        for (String countryId : Locale.getISOCountries()) {
+            COUNTRIES.add(new Country(countryId));
+        }
+    }
 
     /**
      * Instantiates a new Phone field.
@@ -98,7 +110,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
             throw new IllegalStateException("Please provide a valid xml layout");
         }
 
-        final CountriesAdapter adapter = new CountriesAdapter(getContext(), Countries.COUNTRIES);
+        final CountriesAdapter adapter = new CountriesAdapter(getContext(), COUNTRIES);
         mSpinner.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -133,7 +145,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
                     try {
                         Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
                         String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
-                        if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCountryCode())) {
+                        if (regionCode != null && !regionCode.equalsIgnoreCase(mSelectedCountry.getCountryCode())) {
                             selectCountry(regionCode);
                         }
                     } catch (NumberParseException ignored) {
@@ -148,12 +160,12 @@ public abstract class PhoneField extends LinearLayoutCompat {
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mCountry = adapter.getItem(position);
+                mSelectedCountry = adapter.getItem(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mCountry = null;
+                mSelectedCountry = null;
             }
         });
 
@@ -191,7 +203,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
     }
 
     private Phonenumber.PhoneNumber parsePhoneNumber(String number) throws NumberParseException {
-        String defaultRegion = mCountry != null ? mCountry.getCountryCode().toUpperCase() : "";
+        String defaultRegion = mSelectedCountry != null ? mSelectedCountry.getCountryCode().toUpperCase() : "";
         return mPhoneUtil.parseAndKeepRawInput(number, defaultRegion);
     }
 
@@ -223,10 +235,10 @@ public abstract class PhoneField extends LinearLayoutCompat {
     }
 
     private void selectCountry(String regionCode, boolean setAsDefault) {
-        for (int i = 0; i < Countries.COUNTRIES.size(); i++) {
-            Country country = Countries.COUNTRIES.get(i);
+        for (int i = 0; i < COUNTRIES.size(); i++) {
+            Country country = COUNTRIES.get(i);
             if (country.getCountryCode().equalsIgnoreCase(regionCode)) {
-                mCountry = country;
+                mSelectedCountry = country;
                 mSpinner.setSelection(i);
 
                 if (setAsDefault) {
@@ -245,7 +257,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
         try {
             Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
             String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
-            if (regionCode != null && !regionCode.equalsIgnoreCase(mCountry.getCountryCode())) {
+            if (regionCode != null && !regionCode.equalsIgnoreCase(mSelectedCountry.getCountryCode())) {
                 selectCountry(regionCode);
             }
 
