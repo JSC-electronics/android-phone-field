@@ -6,7 +6,7 @@
 
 This is a small UI library which allows you to create phone fields with corresponding country flags and validate the phone number using [libphonenumber](https://github.com/googlei18n/libphonenumber) from Google.
 
-![alt text]( https://raw.githubusercontent.com/JSC-electronics/android-phone-field/master/raw/phone-field.gif "Sample App")
+![alt text]( https://raw.githubusercontent.com/JSC-electronics/android-phone-field/master/phone-field.gif "Sample App")
 
 The library has two different fields:
 
