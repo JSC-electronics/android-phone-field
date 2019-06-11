@@ -64,6 +64,8 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private String mSelectedCountryCode = null;
 
+    private String[] restrictToCountries = null;
+
     private List<Country> mCountries = new ArrayList<>(0);
 
     /**
@@ -102,6 +104,12 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
         try {
             mDefaultCountryCode = a.getString(R.styleable.PhoneField_defaultCountry);
+
+            int countryArrayResId = a.getResourceId(R.styleable.PhoneField_countries, 0);
+            if (countryArrayResId != 0) {
+                restrictToCountries = a.getResources().getStringArray(countryArrayResId);
+            }
+
         } finally {
             a.recycle();
         }
@@ -186,7 +194,8 @@ public abstract class PhoneField extends LinearLayoutCompat {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (String countryId : Locale.getISOCountries()) {
+                for (String countryId : restrictToCountries != null ?
+                        restrictToCountries : Locale.getISOCountries()) {
                     mCountries.add(new Country(countryId,
                             new Locale("", countryId).getDisplayCountry()));
                 }
@@ -207,7 +216,6 @@ public abstract class PhoneField extends LinearLayoutCompat {
                 });
             }
         });
-
     }
 
     /**

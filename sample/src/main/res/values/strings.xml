@@ -21,4 +21,13 @@
     <string name="submit">Submit</string>
     <string name="invalid_phone_number">Please enter a valid phone number</string>
     <string name="valid_phone_number">Valid phone numbers!</string>
+
+    <string-array name="countries">
+        <item>SK</item>
+        <item>CZ</item>
+        <item>US</item>
+        <item>DE</item>
+        <item>FI</item>
+        <item>AX</item>
+    </string-array>
 </resources>
