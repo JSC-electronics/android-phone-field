@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         assert button != null;
 
         phoneInputLayout.setHint(R.string.phone_hint);
-        phoneInputLayout.setDefaultCountry("DE");
 
         phoneEditText.setHint(R.string.phone_hint);
         phoneEditText.setDefaultCountry("FR");

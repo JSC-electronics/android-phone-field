@@ -18,6 +18,8 @@
 package cz.jscelectronics.phonefield;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -28,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -51,24 +54,17 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private Spinner mSpinner;
 
-    private EditText mEditText;
+    private CountriesAdapter mAdapter = null;
 
-    private Country mSelectedCountry;
+    private EditText mEditText;
 
     private final PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
 
-    private int mDefaultCountryPosition = 0;
+    private String mDefaultCountryCode;
 
-    static private final List<Country> COUNTRIES = new ArrayList<>(0);
+    private String mSelectedCountryCode = null;
 
-    static {
-        for (String countryId : Locale.getISOCountries()) {
-            COUNTRIES.add(new Country(countryId,
-                    new Locale("", countryId).getDisplayCountry()));
-        }
-
-        Collections.sort(COUNTRIES, Country.CountryComparatorByName);
-    }
+    private List<Country> mCountries = new ArrayList<>(0);
 
     /**
      * Instantiates a new Phone field.
@@ -98,6 +94,18 @@ public abstract class PhoneField extends LinearLayoutCompat {
      */
     public PhoneField(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.PhoneField,
+                defStyleAttr, 0);
+
+        try {
+            mDefaultCountryCode = a.getString(R.styleable.PhoneField_defaultCountry);
+        } finally {
+            a.recycle();
+        }
+
         inflate(getContext(), getLayoutResId(), this);
         updateLayoutAttributes();
         prepareView();
@@ -114,7 +122,6 @@ public abstract class PhoneField extends LinearLayoutCompat {
             throw new IllegalStateException("Please provide a valid xml layout");
         }
 
-        final CountriesAdapter adapter = new CountriesAdapter(getContext(), COUNTRIES);
         mSpinner.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -137,7 +144,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
             public void afterTextChanged(Editable s) {
                 String rawNumber = s.toString();
                 if (rawNumber.isEmpty()) {
-                    mSpinner.setSelection(mDefaultCountryPosition);
+                    selectCountry(mDefaultCountryCode);
                 } else {
                     if (rawNumber.startsWith("00")) {
                         rawNumber = rawNumber.replaceFirst("00", "+");
@@ -149,7 +156,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
                     try {
                         Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
                         String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
-                        if (regionCode != null && !regionCode.equalsIgnoreCase(mSelectedCountry.getCountryCode())) {
+                        if (regionCode != null && !regionCode.equalsIgnoreCase(mSelectedCountryCode)) {
                             selectCountry(regionCode);
                         }
                     } catch (NumberParseException ignored) {
@@ -160,16 +167,44 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
         mEditText.addTextChangedListener(textWatcher);
 
-        mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedCountry = adapter.getItem(position);
+                Country country = mAdapter.getItem(position);
+
+                if (country != null) {
+                    mSelectedCountryCode = country.getCountryCode();
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mSelectedCountry = null;
+                mSelectedCountryCode = null;
+            }
+        });
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (String countryId : Locale.getISOCountries()) {
+                    mCountries.add(new Country(countryId,
+                            new Locale("", countryId).getDisplayCountry()));
+                }
+
+                Collections.sort(mCountries, Country.CountryComparatorByName);
+                mAdapter = new CountriesAdapter(getContext(), mCountries);
+
+                if (mSelectedCountryCode == null) {
+                    mSelectedCountryCode = mDefaultCountryCode;
+                }
+
+                mSpinner.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSpinner.setAdapter(mAdapter);
+                        selectCountry(mSelectedCountryCode);
+                    }
+                });
             }
         });
 
@@ -207,7 +242,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
     }
 
     private Phonenumber.PhoneNumber parsePhoneNumber(String number) throws NumberParseException {
-        String defaultRegion = mSelectedCountry != null ? mSelectedCountry.getCountryCode().toUpperCase() : "";
+        String defaultRegion = mSelectedCountryCode != null ? mSelectedCountryCode.toUpperCase() : "";
         return mPhoneUtil.parseAndKeepRawInput(number, defaultRegion);
     }
 
@@ -226,29 +261,49 @@ public abstract class PhoneField extends LinearLayoutCompat {
     }
 
     /**
-     * Sets default country.
+     * Get currently set default country as uppercase ISO 3166 2-letter code.
+     */
+    public String getDefaultCountry() {
+        if (mDefaultCountryCode == null) {
+            return "";
+        }
+
+        return mDefaultCountryCode;
+    }
+
+    /**
+     * Set default country.
      *
-     * @param countryCode the country code
+     * @param countryCode Uppercase ISO 3166 2-letter code.
      */
     public void setDefaultCountry(String countryCode) {
-        this.selectCountry(countryCode, true);
+        mDefaultCountryCode = countryCode;
+        if (mEditText.getText().toString().isEmpty()) {
+            selectCountry(countryCode);
+        }
     }
 
-    private void selectCountry(String regionCode) {
-        this.selectCountry(regionCode, false);
-    }
+    private void selectCountry(@Nullable final String countryCode) {
+        if (countryCode != null) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < mCountries.size(); i++) {
+                        Country country = mCountries.get(i);
+                        if (country.getCountryCode().equalsIgnoreCase(countryCode)) {
+                            mSelectedCountryCode = country.getCountryCode();
+                            final int countryIdx = i;
 
-    private void selectCountry(String regionCode, boolean setAsDefault) {
-        for (int i = 0; i < COUNTRIES.size(); i++) {
-            Country country = COUNTRIES.get(i);
-            if (country.getCountryCode().equalsIgnoreCase(regionCode)) {
-                mSelectedCountry = country;
-                mSpinner.setSelection(i);
-
-                if (setAsDefault) {
-                    mDefaultCountryPosition = i;
+                            mSpinner.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSpinner.setSelection(countryIdx);
+                                }
+                            });
+                        }
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -261,7 +316,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
         try {
             Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
             String regionCode = mPhoneUtil.getRegionCodeForNumber(number);
-            if (regionCode != null && !regionCode.equalsIgnoreCase(mSelectedCountry.getCountryCode())) {
+            if (regionCode != null && !regionCode.equalsIgnoreCase(mSelectedCountryCode)) {
                 selectCountry(regionCode);
             }
 
