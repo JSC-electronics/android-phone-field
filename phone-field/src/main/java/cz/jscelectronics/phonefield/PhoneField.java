@@ -64,7 +64,9 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private String mSelectedCountryCode = null;
 
-    private String[] restrictToCountries = null;
+    private String[] mRestrictToCountries = null;
+
+    private Locale mCountryLocale = null;
 
     private List<Country> mCountries = new ArrayList<>(0);
 
@@ -104,10 +106,14 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
         try {
             mDefaultCountryCode = a.getString(R.styleable.PhoneField_defaultCountry);
+            String countryLocale = a.getString(R.styleable.PhoneField_countryLocale);
+            if (countryLocale != null) {
+                mCountryLocale = new Locale(countryLocale);
+            }
 
             int countryArrayResId = a.getResourceId(R.styleable.PhoneField_countries, 0);
             if (countryArrayResId != 0) {
-                restrictToCountries = a.getResources().getStringArray(countryArrayResId);
+                mRestrictToCountries = a.getResources().getStringArray(countryArrayResId);
             }
 
         } finally {
@@ -194,10 +200,12 @@ public abstract class PhoneField extends LinearLayoutCompat {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (String countryId : restrictToCountries != null ?
-                        restrictToCountries : Locale.getISOCountries()) {
+                for (String countryId : mRestrictToCountries != null ?
+                        mRestrictToCountries : Locale.getISOCountries()) {
                     mCountries.add(new Country(countryId,
-                            new Locale("", countryId).getDisplayCountry()));
+                            mCountryLocale != null ?
+                                    new Locale("", countryId).getDisplayCountry(mCountryLocale) :
+                                    new Locale("", countryId).getDisplayCountry()));
                 }
 
                 Collections.sort(mCountries, Country.CountryComparatorByName);

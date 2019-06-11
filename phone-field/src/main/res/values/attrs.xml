@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="PhoneField">
         <attr format="string" name="defaultCountry"/>
+        <attr format="string" name="countryLocale"/>
         <attr format="reference" name="countries"/>
     </declare-styleable>
 </resources>

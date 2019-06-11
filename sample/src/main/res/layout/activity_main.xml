@@ -36,6 +36,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         phoneField:defaultCountry="DE"
+        phoneField:countryLocale="CS"
         phoneField:countries="@array/countries"
         />
 
