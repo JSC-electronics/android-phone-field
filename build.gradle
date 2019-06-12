@@ -27,7 +27,7 @@ buildscript {
     targetSdkVersion = 28
 
     // App dependencies
-    bintrayVersion = '1.6'
+    bintrayVersion = '1.8.4'
     gradleVersion = '3.4.1'
     junitVersion = '4.12'
     phonenumberVersion = '8.10.13'

@@ -19,7 +19,7 @@ apply plugin: 'com.android.library'
 
 ext {
   bintrayRepo = 'maven'
-  bintrayName = 'phone-field'
+  bintrayName = 'android-phone-field'
 
   publishedGroupId = 'cz.jscelectronics.phonefield'
   libraryName = 'phone-field'
@@ -35,6 +35,10 @@ ext {
   developerId = 'vzahradnik'
   developerName = 'Vladimír Záhradník'
   developerEmail = 'vladimir@zahradnik.io'
+
+  organizationId = 'jsc-electronics'
+  organizationName = 'JSC electronics'
+  organizationEmail = 'info@jsc-electronics.cz'
 
   licenseName = 'The Apache Software License, Version 2.0'
   licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
