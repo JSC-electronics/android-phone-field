@@ -36,6 +36,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.google.i18n.phonenumbers.ShortNumberInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -257,20 +258,47 @@ public abstract class PhoneField extends LinearLayoutCompat {
         }
     }
 
+    /**
+     * Checks whether the entered phone number is short number for a given country,
+     * e.g. 1144 for Slovakia. This check is not as reliable, but it's a trade off for us.
+     *
+     * @return <code>true</code> if a number is a possible short number,
+     * <code>false</code> otherwise.
+     */
+    public boolean isShortNumber() {
+        try {
+            return ShortNumberInfo.getInstance().
+                    isPossibleShortNumber(parsePhoneNumber(getRawInput()));
+        } catch (NumberParseException e) {
+            return false;
+        }
+    }
+
     private Phonenumber.PhoneNumber parsePhoneNumber(String number) throws NumberParseException {
         String defaultRegion = mSelectedCountryCode != null ? mSelectedCountryCode.toUpperCase() : "";
         return mPhoneUtil.parseAndKeepRawInput(number, defaultRegion);
     }
 
     /**
-     * Gets phone number.
+     * Get phone number in E164 international format.
      *
      * @return the phone number
      */
     public String getPhoneNumber() {
+        return getPhoneNumber(false);
+    }
+
+    /**
+     * Get phone number in international or national format.
+     * @param nationalFormat specifies to return number in national format instead of E164 format.
+     * @return the phone number
+     */
+    public String getPhoneNumber(boolean nationalFormat) {
         try {
             Phonenumber.PhoneNumber number = parsePhoneNumber(getRawInput());
-            return mPhoneUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.E164);
+            return mPhoneUtil.format(number, nationalFormat ?
+                    PhoneNumberUtil.PhoneNumberFormat.NATIONAL :
+                    PhoneNumberUtil.PhoneNumberFormat.E164);
         } catch (NumberParseException ignored) {
         }
         return getRawInput();

@@ -16,7 +16,6 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string name="app_name" translatable="false">PhoneField</string>
     <string name="phonefield_edittext" translatable="false">phone_edit_text</string>
     <string name="phonefield_flag_spinner" translatable="false">flag_spinner</string>
     <string name="phonefield_til_phone" translatable="false">til_phone</string>

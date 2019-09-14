@@ -15,14 +15,4 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cz.jscelectronics.phonefield">
-
-  <application
-      android:allowBackup="true"
-      android:label="@string/app_name"
-      android:supportsRtl="true">
-
-  </application>
-
-</manifest>
+<manifest package="cz.jscelectronics.phonefield"/>

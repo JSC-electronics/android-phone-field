@@ -30,7 +30,7 @@ ext {
   siteUrl = 'https://github.com/JSC-electronics/android-phone-field'
   gitUrl = 'https://github.com/JSC-electronics/android-phone-field.git'
 
-  libraryVersion = '0.1.4'
+  libraryVersion = '0.1.5'
 
   developerId = 'vzahradnik'
   developerName = 'Vladimír Záhradník'
@@ -47,12 +47,11 @@ ext {
 
 android {
   compileSdkVersion rootProject.compileSdkVersion
-  buildToolsVersion rootProject.buildToolsVersion
 
   defaultConfig {
     minSdkVersion rootProject.minSdkVersion
     targetSdkVersion rootProject.targetSdkVersion
-    versionCode 14
+    versionCode 15
     versionName libraryVersion
   }
   buildTypes {

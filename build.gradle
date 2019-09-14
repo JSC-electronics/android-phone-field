@@ -21,10 +21,9 @@ buildscript {
   // Define versions in a single place
   ext {
     // Sdk and tools
-    buildToolsVersion = '28.0.3'
-    compileSdkVersion = 28
+    compileSdkVersion = 29
     minSdkVersion = 14
-    targetSdkVersion = 28
+    targetSdkVersion = 29
 
     // App dependencies
     bintrayVersion = '1.8.4'
