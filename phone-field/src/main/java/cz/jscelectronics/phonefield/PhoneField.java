@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -57,6 +58,8 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private Spinner mSpinner;
 
+    private ImageView mCountryFlag;
+
     private CountriesAdapter mAdapter = null;
 
     private TextView mTextView;
@@ -71,7 +74,9 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private Locale mCountryLocale = null;
 
-    private String mDefaultPhoneNumber = null;
+    private String mPhoneNumber;
+
+    private boolean mHideCountryFlag;
 
     private List<Country> mCountries = new ArrayList<>(0);
 
@@ -121,7 +126,9 @@ public abstract class PhoneField extends LinearLayoutCompat {
                 mRestrictToCountries = a.getResources().getStringArray(countryArrayResId);
             }
 
-            mDefaultPhoneNumber = a.getString(R.styleable.PhoneField_phoneNumber);
+            mPhoneNumber = a.getString(R.styleable.PhoneField_phoneNumber);
+
+            mHideCountryFlag = a.getBoolean(R.styleable.PhoneField_hideCountryFlag, false);
         } finally {
             a.recycle();
         }
@@ -136,20 +143,31 @@ public abstract class PhoneField extends LinearLayoutCompat {
      */
     protected void prepareView() {
         mSpinner = findViewWithTag(getResources().getString(R.string.phonefield_flag_spinner));
+        mCountryFlag = findViewWithTag(getResources().getString(R.string.phonefield_flag_country));
         mTextView = findViewWithTag(getResources().getString(R.string.phonefield_textview));
 
-        if (mSpinner == null || mTextView == null) {
+        if ((mSpinner == null && mCountryFlag == null) || mTextView == null) {
             throw new IllegalStateException("Please provide a valid xml layout");
         }
 
-        mSpinner.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
-                v.performClick();
-                return false;
+        if (mSpinner != null) {
+            mSpinner.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideKeyboard();
+                    v.performClick();
+                    return false;
+                }
+            });
+        }
+
+        if (mHideCountryFlag) {
+            if (mSpinner != null) {
+                mSpinner.setVisibility(GONE);
+            } else if (mCountryFlag != null) {
+                mCountryFlag.setVisibility(GONE);
             }
-        });
+        }
 
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -189,24 +207,22 @@ public abstract class PhoneField extends LinearLayoutCompat {
             mTextView.addTextChangedListener(textWatcher);
         }
 
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Country country = mAdapter.getItem(position);
+        if (mSpinner != null) {
+            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Country country = mAdapter.getItem(position);
 
-                if (country != null) {
-                    mSelectedCountryCode = country.getCountryCode();
+                    if (country != null) {
+                        mSelectedCountryCode = country.getCountryCode();
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                mSelectedCountryCode = null;
-            }
-        });
-
-        if (mDefaultPhoneNumber != null) {
-            setPhoneNumber(mDefaultPhoneNumber);
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    mSelectedCountryCode = null;
+                }
+            });
         }
 
         AsyncTask.execute(new Runnable() {
@@ -227,13 +243,33 @@ public abstract class PhoneField extends LinearLayoutCompat {
                     mSelectedCountryCode = mDefaultCountryCode;
                 }
 
-                mSpinner.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSpinner.setAdapter(mAdapter);
-                        selectCountry(mSelectedCountryCode);
-                    }
-                });
+                if (mSpinner != null) {
+                    mSpinner.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSpinner.setAdapter(mAdapter);
+                            selectCountry(mSelectedCountryCode);
+                        }
+                    });
+                }
+
+                if (mCountryFlag != null) {
+                    mCountryFlag.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            selectCountry(mSelectedCountryCode);
+                        }
+                    });
+                }
+
+                if (mPhoneNumber != null) {
+                    mTextView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setPhoneNumber(mPhoneNumber);
+                        }
+                    });
+                }
             }
         });
     }
@@ -349,12 +385,21 @@ public abstract class PhoneField extends LinearLayoutCompat {
                             mSelectedCountryCode = country.getCountryCode();
                             final int countryIdx = i;
 
-                            mSpinner.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSpinner.setSelection(countryIdx);
-                                }
-                            });
+                            if (mSpinner != null) {
+                                mSpinner.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mSpinner.setSelection(countryIdx);
+                                    }
+                                });
+                            } else if (mCountryFlag != null) {
+                                mCountryFlag.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mCountryFlag.setImageResource(mCountries.get(countryIdx).getResId(getContext()));
+                                    }
+                                });
+                            }
                         }
                     }
                 }
