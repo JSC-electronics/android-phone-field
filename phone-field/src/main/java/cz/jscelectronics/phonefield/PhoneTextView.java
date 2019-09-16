@@ -43,11 +43,10 @@ public class PhoneTextView extends PhoneField {
 
     @Override
     protected void updateLayoutAttributes() {
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         setGravity(Gravity.CENTER_VERTICAL);
         setOrientation(HORIZONTAL);
-        setPadding(0, getContext().getResources().getDimensionPixelSize(R.dimen.padding_large), 0, 0);
     }
 
     @Override
