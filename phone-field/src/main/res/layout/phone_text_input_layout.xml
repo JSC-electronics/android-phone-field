@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:tag="@string/phonefield_edittext"
+            android:tag="@string/phonefield_textview"
             android:textColor="@color/pf_grey"
             android:textSize="@dimen/text_size" />
     </com.google.android.material.textfield.TextInputLayout>

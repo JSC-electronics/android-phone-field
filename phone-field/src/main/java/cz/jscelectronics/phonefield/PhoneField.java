@@ -23,12 +23,15 @@ import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -55,9 +58,11 @@ public abstract class PhoneField extends LinearLayoutCompat {
 
     private Spinner mSpinner;
 
+    private ImageView mCountryFlag;
+
     private CountriesAdapter mAdapter = null;
 
-    private EditText mEditText;
+    private TextView mTextView;
 
     private final PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
 
@@ -68,6 +73,10 @@ public abstract class PhoneField extends LinearLayoutCompat {
     private String[] mRestrictToCountries = null;
 
     private Locale mCountryLocale = null;
+
+    private String mPhoneNumber;
+
+    private boolean mHideCountryFlag;
 
     private List<Country> mCountries = new ArrayList<>(0);
 
@@ -117,6 +126,9 @@ public abstract class PhoneField extends LinearLayoutCompat {
                 mRestrictToCountries = a.getResources().getStringArray(countryArrayResId);
             }
 
+            mPhoneNumber = a.getString(R.styleable.PhoneField_phoneNumber);
+
+            mHideCountryFlag = a.getBoolean(R.styleable.PhoneField_hideCountryFlag, false);
         } finally {
             a.recycle();
         }
@@ -131,20 +143,31 @@ public abstract class PhoneField extends LinearLayoutCompat {
      */
     protected void prepareView() {
         mSpinner = findViewWithTag(getResources().getString(R.string.phonefield_flag_spinner));
-        mEditText = findViewWithTag(getResources().getString(R.string.phonefield_edittext));
+        mCountryFlag = findViewWithTag(getResources().getString(R.string.phonefield_flag_country));
+        mTextView = findViewWithTag(getResources().getString(R.string.phonefield_textview));
 
-        if (mSpinner == null || mEditText == null) {
+        if ((mSpinner == null && mCountryFlag == null) || mTextView == null) {
             throw new IllegalStateException("Please provide a valid xml layout");
         }
 
-        mSpinner.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
-                v.performClick();
-                return false;
+        if (mSpinner != null) {
+            mSpinner.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideKeyboard();
+                    v.performClick();
+                    return false;
+                }
+            });
+        }
+
+        if (mHideCountryFlag) {
+            if (mSpinner != null) {
+                mSpinner.setVisibility(GONE);
+            } else if (mCountryFlag != null) {
+                mCountryFlag.setVisibility(GONE);
             }
-        });
+        }
 
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -163,10 +186,10 @@ public abstract class PhoneField extends LinearLayoutCompat {
                 } else {
                     if (rawNumber.startsWith("00")) {
                         rawNumber = rawNumber.replaceFirst("00", "+");
-                        mEditText.removeTextChangedListener(this);
-                        mEditText.setText(rawNumber);
-                        mEditText.addTextChangedListener(this);
-                        mEditText.setSelection(rawNumber.length());
+                        mTextView.removeTextChangedListener(this);
+                        mTextView.setText(rawNumber);
+                        mTextView.addTextChangedListener(this);
+                        ((EditText) mTextView).setSelection(rawNumber.length());
                     }
                     try {
                         Phonenumber.PhoneNumber number = parsePhoneNumber(rawNumber);
@@ -180,23 +203,27 @@ public abstract class PhoneField extends LinearLayoutCompat {
             }
         };
 
-        mEditText.addTextChangedListener(textWatcher);
+        if (mTextView instanceof EditText) {
+            mTextView.addTextChangedListener(textWatcher);
+        }
 
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Country country = mAdapter.getItem(position);
+        if (mSpinner != null) {
+            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Country country = mAdapter.getItem(position);
 
-                if (country != null) {
-                    mSelectedCountryCode = country.getCountryCode();
+                    if (country != null) {
+                        mSelectedCountryCode = country.getCountryCode();
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                mSelectedCountryCode = null;
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    mSelectedCountryCode = null;
+                }
+            });
+        }
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -216,13 +243,33 @@ public abstract class PhoneField extends LinearLayoutCompat {
                     mSelectedCountryCode = mDefaultCountryCode;
                 }
 
-                mSpinner.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSpinner.setAdapter(mAdapter);
-                        selectCountry(mSelectedCountryCode);
-                    }
-                });
+                if (mSpinner != null) {
+                    mSpinner.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSpinner.setAdapter(mAdapter);
+                            selectCountry(mSelectedCountryCode);
+                        }
+                    });
+                }
+
+                if (mCountryFlag != null) {
+                    mCountryFlag.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            selectCountry(mSelectedCountryCode);
+                        }
+                    });
+                }
+
+                if (mPhoneNumber != null) {
+                    mTextView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setPhoneNumber(mPhoneNumber);
+                        }
+                    });
+                }
             }
         });
     }
@@ -237,12 +284,12 @@ public abstract class PhoneField extends LinearLayoutCompat {
     }
 
     /**
-     * Gets edit text.
+     * Gets text view (or edit text).
      *
      * @return the edit text
      */
-    public EditText getEditText() {
-        return mEditText;
+    public TextView getTextView() {
+        return mTextView;
     }
 
     /**
@@ -322,7 +369,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
      */
     public void setDefaultCountry(String countryCode) {
         mDefaultCountryCode = countryCode;
-        if (mEditText.getText().toString().isEmpty()) {
+        if (mTextView.getText().toString().isEmpty()) {
             selectCountry(countryCode);
         }
     }
@@ -338,12 +385,21 @@ public abstract class PhoneField extends LinearLayoutCompat {
                             mSelectedCountryCode = country.getCountryCode();
                             final int countryIdx = i;
 
-                            mSpinner.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSpinner.setSelection(countryIdx);
-                                }
-                            });
+                            if (mSpinner != null) {
+                                mSpinner.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mSpinner.setSelection(countryIdx);
+                                    }
+                                });
+                            } else if (mCountryFlag != null) {
+                                mCountryFlag.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mCountryFlag.setImageResource(mCountries.get(countryIdx).getResId(getContext()));
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -364,14 +420,20 @@ public abstract class PhoneField extends LinearLayoutCompat {
                 selectCountry(regionCode);
             }
 
-            mEditText.setText(mPhoneUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
+            mTextView.setText(mPhoneUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
         } catch (NumberParseException ignored) {
         }
     }
 
     private void hideKeyboard() {
-        ((InputMethodManager) getContext().getSystemService(
-                Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+        try {
+            ((InputMethodManager) getContext().getSystemService(
+                    Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mTextView.getWindowToken(), 0);
+        } catch (NullPointerException e) {
+            if (e.getMessage() != null) {
+                Log.e("PhoneField", e.getMessage());
+            }
+        }
     }
 
     /**
@@ -392,7 +454,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
      * @param resId the res id
      */
     public void setHint(int resId) {
-        mEditText.setHint(resId);
+        mTextView.setHint(resId);
     }
 
     /**
@@ -401,7 +463,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
      * @return the raw input
      */
     public String getRawInput() {
-        return mEditText.getText().toString();
+        return mTextView.getText().toString();
     }
 
     /**
@@ -410,7 +472,7 @@ public abstract class PhoneField extends LinearLayoutCompat {
      * @param error the error
      */
     public void setError(String error) {
-        mEditText.setError(error);
+        mTextView.setError(error);
     }
 
     /**
@@ -419,6 +481,6 @@ public abstract class PhoneField extends LinearLayoutCompat {
      * @param resId the res id
      */
     public void setTextColor(int resId) {
-        mEditText.setTextColor(resId);
+        mTextView.setTextColor(resId);
     }
 }

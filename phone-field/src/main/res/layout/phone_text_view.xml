@@ -15,23 +15,26 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:layout_width="@dimen/spinner_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_large"
-        android:dropDownWidth="@dimen/spinner_dropdown_width"
-        android:popupBackground="@color/pf_white"
-        android:tag="@string/phonefield_flag_spinner" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:inputType="phone"
-        android:tag="@string/phonefield_textview"
-        android:textColor="@color/pf_grey"
+    <ImageView
+        android:id="@+id/flag"
+        android:layout_width="@dimen/flag_size"
+        android:layout_height="@dimen/flag_size"
+        android:contentDescription="@string/country_flag"
+        android:tag="@string/phonefield_flag_country"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        tools:src="@drawable/country_flag_sk"
         />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="@string/phonefield_textview"
+        android:textColor="@color/pf_grey" />
 
 </merge>
