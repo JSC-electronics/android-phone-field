@@ -27,10 +27,10 @@ buildscript {
 
     // App dependencies
     bintrayVersion = '1.8.4'
-    gradleVersion = '3.5.0'
+    gradleVersion = '3.6.0'
     junitVersion = '4.12'
-    phonenumberVersion = '8.10.18'
-    materialVersion = '1.0.0'
+    phonenumberVersion = '8.11.5'
+    materialVersion = '1.1.0'
     mavenVersion = '2.1'
     supportLibraryVersion = '1.1.0'
   }

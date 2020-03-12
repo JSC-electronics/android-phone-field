@@ -41,7 +41,6 @@
         android:layout_toRightOf="@id/flag"
         android:layout_toStartOf="@id/dial_code"
         android:layout_toLeftOf="@id/dial_code"
-        android:textColor="@color/pf_grey"
         tools:text="Slovakia"/>
 
     <TextView
@@ -53,7 +52,6 @@
         android:maxLines="1"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:textColor="@color/pf_grey_light"
         tools:text="+421"/>
 
 </RelativeLayout>

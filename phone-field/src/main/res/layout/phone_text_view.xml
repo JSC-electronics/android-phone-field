@@ -34,7 +34,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_weight="1"
-        android:tag="@string/phonefield_textview"
-        android:textColor="@color/pf_grey" />
+        android:tag="@string/phonefield_textview"/>
 
 </merge>
